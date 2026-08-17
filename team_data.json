@@ -1,0 +1,15 @@
+{
+  "participants": [
+    { "id": "p1", "name": "John Doe" },
+    { "id": "p2", "name": "Jane Smith" },
+    { "id": "p3", "name": "Alice Johnson" }
+  ],
+  "history": [
+    {
+      "id": "h1",
+      "winnerName": "John Doe",
+      "selectionDate": "2026-08-17",
+      "weekRange": "Aug 21, 2026 - Aug 28, 2026"
+    }
+  ]
+}

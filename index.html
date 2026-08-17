@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Responsibility Roulette</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="header__brand">
+        <div class="header__logo" aria-hidden="true">&#9672;</div>
+        <div>
+          <h1 class="header__title">Weekly Responsibility Roulette</h1>
+          <p class="header__subtitle">Fair, transparent weekly duty assignment</p>
+        </div>
+      </div>
+      <div class="header__actions">
+        <label class="btn btn--secondary" for="file-input">
+          <span class="btn__icon" aria-hidden="true">&#8615;</span>
+          Load JSON
+        </label>
+        <input type="file" id="file-input" accept=".json,application/json" hidden>
+        <button type="button" class="btn btn--primary" id="save-btn" disabled>
+          <span class="btn__icon" aria-hidden="true">&#8613;</span>
+          Save JSON
+        </button>
+      </div>
+    </header>
+
+    <div class="status-bar" id="status-bar" role="status">
+      <span class="status-bar__dot" aria-hidden="true"></span>
+      <span id="status-text">No data loaded. Load a team_data.json file or start with sample data.</span>
+    </div>
+
+    <main class="dashboard" id="dashboard">
+      <section class="panel panel--participants" aria-labelledby="participants-heading">
+        <div class="panel__header">
+          <h2 id="participants-heading">Participants</h2>
+          <span class="badge" id="participant-count">0</span>
+        </div>
+        <form class="add-form" id="add-participant-form">
+          <input
+            type="text"
+            id="participant-name-input"
+            class="input"
+            placeholder="Full name"
+            autocomplete="off"
+            maxlength="80"
+            disabled
+          >
+          <button type="submit" class="btn btn--primary btn--compact" id="add-participant-btn" disabled>Add</button>
+        </form>
+        <ul class="participant-list" id="participant-list" aria-live="polite"></ul>
+      </section>
+
+      <section class="panel panel--roulette" aria-labelledby="roulette-heading">
+        <div class="panel__header panel__header--center">
+          <h2 id="roulette-heading">Spin the Wheel</h2>
+        </div>
+        <div class="roulette-area">
+          <div class="roulette-wrapper">
+            <div class="roulette-pointer" aria-hidden="true"></div>
+            <canvas id="roulette-canvas" width="420" height="420" role="img" aria-label="Responsibility roulette wheel"></canvas>
+          </div>
+          <p class="week-preview" id="week-preview"></p>
+          <button type="button" class="btn btn--accent btn--large" id="spin-btn" disabled>
+            Spin for This Week
+          </button>
+          <p class="result-message" id="result-message" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section class="panel panel--history" aria-labelledby="history-heading">
+        <div class="panel__header">
+          <h2 id="history-heading">Selection History</h2>
+          <span class="badge" id="history-count">0</span>
+        </div>
+        <div class="history-list" id="history-list" aria-live="polite"></div>
+      </section>
+
+      <section class="panel panel--stats" id="stats-panel" aria-labelledby="stats-heading">
+        <div class="panel__header">
+          <h2 id="stats-heading">Selection Statistics</h2>
+        </div>
+        <div class="stats-list" id="stats-list" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <div class="empty-state" id="empty-state">
+      <div class="empty-state__content">
+        <h2>Get Started</h2>
+        <p>Load an existing <code>team_data.json</code> file or create a new team roster to begin.</p>
+        <div class="empty-state__actions">
+          <label class="btn btn--primary" for="file-input-empty">
+            Load JSON File
+          </label>
+          <input type="file" id="file-input-empty" accept=".json,application/json" hidden>
+          <button type="button" class="btn btn--secondary" id="start-fresh-btn">Start Fresh</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Celebration Modal -->
+    <div class="modal-overlay" id="modal-overlay" hidden aria-modal="true" role="dialog" aria-labelledby="modal-winner-name">
+      <div class="modal">
+        <div class="modal__banner">
+          <p class="modal__label">This week's responsible person is</p>
+          <h2 class="modal__winner-name" id="modal-winner-name"></h2>
+        </div>
+
+        <div class="modal__body">
+          <p class="modal__date-title">Confirm the responsibility week dates</p>
+          <div class="modal__dates">
+            <div class="modal__date-field">
+              <label class="modal__date-label" for="modal-start-date">Start Date (Friday)</label>
+              <input type="date" id="modal-start-date" class="input">
+            </div>
+            <span class="modal__date-sep" aria-hidden="true">&#8594;</span>
+            <div class="modal__date-field">
+              <label class="modal__date-label" for="modal-end-date">End Date (Following Friday)</label>
+              <input type="date" id="modal-end-date" class="input">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal__actions">
+          <button type="button" class="btn btn--secondary" id="modal-cancel-btn">Cancel</button>
+          <button type="button" class="btn btn--primary" id="modal-accept-btn" disabled>
+            Accept &amp; Download (<span id="modal-countdown">7</span>s)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1/dist/confetti.browser.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
