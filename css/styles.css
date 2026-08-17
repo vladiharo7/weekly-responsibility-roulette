@@ -161,14 +161,13 @@ code {
   flex: 1;
   display: grid;
   grid-template-columns: 1fr 1.3fr 1fr;
-  grid-template-rows: auto auto;
+  grid-template-rows: minmax(600px, min(680px, calc(100vh - 180px))) auto;
   align-items: stretch;
   gap: 20px;
   padding: 1.25rem 1.5rem 1.75rem;
   max-width: 1400px;
   width: 95%;
   margin: 0 auto;
-  min-height: calc(100vh - 120px);
 }
 
 .dashboard--hidden {
@@ -184,18 +183,21 @@ code {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: min(520px, calc(100vh - 200px));
+  min-height: 0;
+  height: 100%;
 }
 
 .panel--participants,
 .panel--history,
 .panel--roulette {
-  max-height: min(760px, calc(100vh - 140px));
+  max-height: 100%;
 }
 
 .panel--stats {
   grid-column: 1 / -1;
+  height: auto;
   min-height: auto;
+  max-height: none;
 }
 
 .panel__header {
@@ -352,6 +354,7 @@ code {
   gap: 0.5rem;
   padding: 1rem 1.25rem;
   border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
 }
 
 /* ── Participant list ────────────────────────────────────────────── */
@@ -359,9 +362,8 @@ code {
   list-style: none;
   margin: 0;
   padding: 0.5rem;
-  flex: 1;
+  flex: 1 1 0;
   min-height: 0;
-  max-height: calc(100vh - 350px);
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -423,7 +425,7 @@ code {
 
 /* ── Roulette ────────────────────────────────────────────────────── */
 .roulette-area {
-  flex: 1;
+  flex: 1 1 0;
   min-height: 0;
   width: 100%;
   display: flex;
@@ -432,6 +434,7 @@ code {
   justify-content: center;
   padding: 0.75rem 1.25rem 24px;
   gap: 14px;
+  overflow: hidden;
 }
 
 .roulette-wrapper {
@@ -495,9 +498,8 @@ code {
 
 /* ── History ─────────────────────────────────────────────────────── */
 .history-list {
-  flex: 1;
+  flex: 1 1 0;
   min-height: 0;
-  max-height: min(520px, calc(100vh - 320px));
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0.5rem;
@@ -843,18 +845,16 @@ code {
 }
 
 @media (max-height: 850px) {
+  .dashboard {
+    grid-template-rows: minmax(0, calc(100vh - 160px)) auto;
+  }
+
   .panel {
     min-height: 0;
   }
 
-  .panel--participants,
-  .panel--history,
-  .panel--roulette {
-    max-height: calc(100vh - 120px);
-  }
-
   .roulette-wrapper {
-    width: clamp(300px, 34vh, 360px);
+    width: clamp(280px, 32vh, 340px);
   }
 
   .roulette-area {
@@ -880,7 +880,16 @@ code {
   .panel--roulette {
     grid-column: 1 / -1;
     order: -1;
-    min-height: auto;
+    min-height: 520px;
+    height: auto;
+    max-height: none;
+  }
+
+  .panel--participants,
+  .panel--history {
+    min-height: 480px;
+    height: auto;
+    max-height: 560px;
   }
 
   .panel--stats {
@@ -905,7 +914,16 @@ code {
 
   .dashboard {
     grid-template-columns: 1fr;
+    grid-template-rows: auto;
     padding: 1rem;
+  }
+
+  .panel--participants,
+  .panel--history,
+  .panel--roulette {
+    max-height: 560px;
+    min-height: 0;
+    height: auto;
   }
 
   .status-bar {
@@ -928,13 +946,6 @@ code {
   .modal__actions .btn {
     width: 100%;
     justify-content: center;
-  }
-
-  .panel--participants,
-  .panel--history,
-  .panel--roulette {
-    max-height: none;
-    min-height: 0;
   }
 
   .roulette-wrapper {
