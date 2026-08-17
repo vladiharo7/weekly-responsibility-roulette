@@ -561,7 +561,7 @@ function drawWheel() {
     ctx.rotate(startAngle + sliceAngle / 2);
     ctx.textAlign    = 'right';
     ctx.fillStyle    = isResting ? '#ffffff' : '#ffffff';
-    ctx.font         = '600 13px Segoe UI, system-ui, sans-serif';
+    ctx.font         = '600 15px Segoe UI, system-ui, sans-serif';
 
     var label = isResting
       ? truncateLabel(participant.name, 10) + ' (Rest)'
