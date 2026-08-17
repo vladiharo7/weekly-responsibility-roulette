@@ -11,7 +11,7 @@ var WHEEL_COLORS = [
 ];
 
 var WHEEL_COLOR_RESTING = '#94a3b8';
-var COUNTDOWN_SECONDS = 5;
+var COUNTDOWN_SECONDS = 3;
 
 /* ── Application state ──────────────────────────────────────────── */
 var state = {
