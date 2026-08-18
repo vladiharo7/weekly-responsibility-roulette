@@ -607,6 +607,19 @@ function normalizeAngle(angle) {
   return ((angle % tau) + tau) % tau;
 }
 
+/**
+ * Slice 0 is drawn from 12 o'clock (top) clockwise. Positive canvas rotation
+ * spins the wheel clockwise, so the stationary top pointer sweeps the slices
+ * in reverse index order. Map the final rotation back to the slice under the pointer.
+ */
+function getIndexUnderPointer(rotationRadians, count) {
+  var actualDeg    = (rotationRadians * 180 / Math.PI) % 360;
+  actualDeg        = (actualDeg + 360) % 360;
+  var pointerAngle = (360 - actualDeg) % 360;
+  var sliceAngle   = 360 / count;
+  return Math.floor(pointerAngle / sliceAngle) % count;
+}
+
 function handleSpin() {
   if (state.isSpinning || state.participants.length < 2) return;
 
@@ -616,15 +629,16 @@ function handleSpin() {
   dom.resultMessage.classList.add('result-message--empty');
 
   var winnerIndex = pickEligibleIndex();
-  var winner      = state.participants[winnerIndex];
 
-  var sliceAngle      = (Math.PI * 2) / state.participants.length;
+  // Slices already start at 12 o'clock (-π/2), so the rotation that centers
+  // slice i under the top pointer is just the negative of the slice's midpoint
+  // measured from that origin — not an extra -90° pointer offset.
+  var sliceAngle        = (Math.PI * 2) / state.participants.length;
   var targetSliceCenter = winnerIndex * sliceAngle + sliceAngle / 2;
-  var pointerAngle    = -Math.PI / 2;
-  var desiredRotation = pointerAngle - targetSliceCenter;
-  var fullSpins       = 5 + Math.floor(Math.random() * 3);
-  var startRotation   = state.rotation;
-  var endRotation     = startRotation + fullSpins * Math.PI * 2 +
+  var desiredRotation   = -targetSliceCenter;
+  var fullSpins         = 5 + Math.floor(Math.random() * 3);
+  var startRotation     = state.rotation;
+  var endRotation       = startRotation + fullSpins * Math.PI * 2 +
     normalizeAngle(desiredRotation - normalizeAngle(startRotation));
 
   var duration  = 4200;
@@ -641,7 +655,8 @@ function handleSpin() {
     if (progress < 1) {
       requestAnimationFrame(animate);
     } else {
-      openCelebrationModal(winner);
+      var visualIndex = getIndexUnderPointer(state.rotation, state.participants.length);
+      openCelebrationModal(state.participants[visualIndex]);
     }
   }
 
